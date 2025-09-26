@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Company.Client.DAL;
 using Company.Client.PL.Extensions;
+using Company.Client.BLL.Services.Department;
+using Company.Client.BLL;
 
 namespace Company.Client.PL
 {
@@ -16,6 +18,7 @@ namespace Company.Client.PL
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddPersistenceServices(builder.Configuration);
+            builder.Services.AddApplicationServices();
 
             #region Inject DbContext & its Options
             //builder.Services.AddDbContext<AppDbContext>(

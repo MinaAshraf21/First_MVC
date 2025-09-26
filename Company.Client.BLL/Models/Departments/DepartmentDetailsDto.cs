@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Company.Client.BLL.Models.Departments
 {
-    internal record DepartmentDetailsDto(int Id, string CreatedBy, DateTime CreatedOn, string LastModifiedBy, DateTime LastModifiedOn, string Name, string Code, string? Description, DateOnly CreationDate);
+    public record DepartmentDetailsDto(int Id, string CreatedBy, DateTime CreatedOn, string LastModifiedBy, DateTime LastModifiedOn, string Name, string Code, string? Description, DateOnly CreationDate);
 }

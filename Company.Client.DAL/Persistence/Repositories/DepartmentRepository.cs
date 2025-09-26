@@ -20,6 +20,7 @@ namespace Company.Client.DAL.Persistence.Repositories
         }
         public Department? Get(int id)
         {
+            //takes params -> because we probably can deal with an entity with composite PK 
             var department = _context.Find<Department>(id);
 
             //we should search locally first

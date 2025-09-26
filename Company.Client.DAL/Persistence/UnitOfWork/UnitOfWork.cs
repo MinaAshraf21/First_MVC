@@ -18,9 +18,9 @@ namespace Company.Client.DAL.Persistence.UnitOfWork
 
         public UnitOfWork(AppDbContext context)
         {
-            DepartmentRepository = new DepartmentRepository(context);
-            //EmployeeRepository = new EmployeeRepository(context);
             _context = context;
+            DepartmentRepository = new DepartmentRepository(_context);
+            //EmployeeRepository = new EmployeeRepository(context);
         }
 
         public int Complete()

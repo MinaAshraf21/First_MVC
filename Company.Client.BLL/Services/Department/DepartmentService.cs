@@ -5,7 +5,7 @@ using Company.Client.DAL.Entities;
 
 namespace Company.Client.BLL.Services.Department
 {
-    internal class DepartmentService : IDepartmentService
+    public class DepartmentService : IDepartmentService
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -66,6 +66,7 @@ namespace Company.Client.BLL.Services.Department
         {
             var departmentToUpdate = new DAL.Entities.Department()
             {
+                Id = department.Id,
                 Name = department.Name,
                 Code = department.Code,
                 Description = department.Description,

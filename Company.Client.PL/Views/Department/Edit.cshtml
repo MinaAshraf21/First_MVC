@@ -1,0 +1,44 @@
+﻿@model EditDepartmentViewModel
+@{
+    ViewData["Title"] = "Edit Department";
+}
+
+
+<div class="row justify-content-center align-content-center mt-3">
+    <h1 class="col-8 my-4 text-center">Update Department</h1>
+
+    <form class="col-6" asp-action="Edit" method="post">
+        @* 
+            this will make a security issue , any user can change it from the inspect view
+             <input asp-for="Id" hidden/> 
+        *@
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group mb-3">
+            @* <label class="form-label" for="Code"></label> *@
+            @* <input id="Code" name="Code" type="text" /> *@
+            <label class="form-label" asp-for="Code"></label>
+            <input asp-for="Code" class="form-control" />
+            @* asp-validation-for : ensures validation attributes on Code field [in EditDepartmentViewModel] *@
+            <span asp-validation-for="Code" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" asp-for="Description"></label>
+            <textarea class="form-control" asp-for="Description"></textarea>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" asp-for="CreationDate"></label>
+            <input type="date" asp-for="CreationDate" class="form-control" />
+        </div>
+        <div class="mt-4 m-auto">
+            <input class="btn btn-success" type="submit" value="Save" />
+            <a class="btn btn-outline-dark" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</div>

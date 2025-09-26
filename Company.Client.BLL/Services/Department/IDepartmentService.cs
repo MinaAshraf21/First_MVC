@@ -2,7 +2,7 @@
 
 namespace Company.Client.BLL.Services.Department
 {
-    internal interface IDepartmentService
+    public interface IDepartmentService
     {
         IEnumerable<DepartmentDto> GetAllDepartments();
         DepartmentDetailsDto? GetDepartmentById(int id);

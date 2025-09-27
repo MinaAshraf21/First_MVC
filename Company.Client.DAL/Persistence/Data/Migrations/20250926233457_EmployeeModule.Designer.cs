@@ -4,6 +4,7 @@ using Company.Client.DAL.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Company.Client.DAL.Persistence.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250926233457_EmployeeModule")]
+    partial class EmployeeModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,17 +61,11 @@ namespace Company.Client.DAL.Persistence.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasComputedColumnSql("GETUTCDate()");
 
-                    b.Property<int>("ManagerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(10)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ManagerId")
-                        .IsUnique();
 
                     b.ToTable("Departments");
                 });
@@ -95,9 +92,6 @@ namespace Company.Client.DAL.Persistence.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDate()");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(100)");
@@ -144,41 +138,7 @@ namespace Company.Client.DAL.Persistence.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
-
                     b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("Company.Client.DAL.Entities.Department", b =>
-                {
-                    b.HasOne("Company.Client.DAL.Entities.Employee", "Manager")
-                        .WithOne("ManagedDepartment")
-                        .HasForeignKey("Company.Client.DAL.Entities.Department", "ManagerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Manager");
-                });
-
-            modelBuilder.Entity("Company.Client.DAL.Entities.Employee", b =>
-                {
-                    b.HasOne("Company.Client.DAL.Entities.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("Company.Client.DAL.Entities.Department", b =>
-                {
-                    b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("Company.Client.DAL.Entities.Employee", b =>
-                {
-                    b.Navigation("ManagedDepartment");
                 });
 #pragma warning restore 612, 618
         }

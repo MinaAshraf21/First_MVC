@@ -1,8 +1,6 @@
 ﻿using Company.Client.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Company.Client.DAL.Persistence.Data
 {
@@ -25,5 +23,6 @@ namespace Company.Client.DAL.Persistence.Data
         }
 
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }

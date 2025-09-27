@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Company.Client.DAL.Contracts.Repositories
 {
-    public interface IDepartmentRepository : IBaseRepository<Department,int>
+    public interface IEmployeeRepository : IBaseRepository<Employee,int>
     {
 
     }

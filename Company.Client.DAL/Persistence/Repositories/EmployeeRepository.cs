@@ -4,9 +4,9 @@ using Company.Client.DAL.Persistence.Data;
 
 namespace Company.Client.DAL.Persistence.Repositories
 {
-    internal class DepartmentRepository : BaseRepository<Department , int> , IDepartmentRepository
+    internal class EmployeeRepository : BaseRepository<Employee , int> , IEmployeeRepository
     {
-        public DepartmentRepository(AppDbContext context) : base(context)
+        public EmployeeRepository(AppDbContext context) : base(context)
         {
         }
     }

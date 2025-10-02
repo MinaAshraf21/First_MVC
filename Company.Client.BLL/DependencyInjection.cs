@@ -1,4 +1,5 @@
 ﻿using Company.Client.BLL.Services.Department;
+using Company.Client.BLL.Services.Employee;
 using Company.Client.DAL.Contracts;
 using Company.Client.DAL.Contracts.Repositories;
 using Company.Client.DAL.Persistence.Data;
@@ -17,6 +18,7 @@ namespace Company.Client.BLL
         public static IServiceCollection AddApplicationServices(this IServiceCollection Services)
         {
             Services.AddScoped<IDepartmentService, DepartmentService>();
+            Services.AddScoped<IEmployeeService, EmployeeService>();
 
             return Services;
         }

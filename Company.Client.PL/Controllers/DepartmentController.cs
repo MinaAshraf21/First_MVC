@@ -20,7 +20,7 @@ namespace Company.Client.PL.Controllers
 
         private readonly ILogger<DepartmentController> _logger;
         private readonly IDepartmentService _departmentService;
-        public DepartmentController(ILogger<DepartmentController> logger ,IDepartmentService departmentService)
+        public DepartmentController(ILogger<DepartmentController> logger , IDepartmentService departmentService)
         {
             _logger = logger;
             _departmentService = departmentService;
@@ -89,6 +89,7 @@ namespace Company.Client.PL.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreateDepartmentViewModel createDepartmentVM)
         {
             string message = "Department Created Successfully!";
@@ -153,6 +154,7 @@ namespace Company.Client.PL.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute]int id, EditDepartmentViewModel editDepartmentVM)
         {
 
@@ -226,6 +228,8 @@ namespace Company.Client.PL.Controllers
         //    return View(departmentViewModel);
         //}
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
 

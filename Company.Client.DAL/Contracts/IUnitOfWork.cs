@@ -10,7 +10,10 @@ namespace Company.Client.DAL.Contracts
     public interface IUnitOfWork
     {
         //we need a property signuture for each repository
-        public IDepartmentRepository DepartmentRepository { get; set; }
+        //public IDepartmentRepository DepartmentRepository { get; set; }
+
+        public IEmployeeRepository EmployeeRepository { get; }
+        public IDepartmentRepository DepartmentRepository { get; }
 
         int Complete();
         void Dispose();

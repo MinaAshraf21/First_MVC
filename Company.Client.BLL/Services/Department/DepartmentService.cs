@@ -1,6 +1,8 @@
 ﻿using Company.Client.BLL.Models.Departments;
 using Company.Client.DAL.Contracts;
 using Company.Client.DAL.Entities;
+using Company.Client.DAL.Persistence.Common;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Company.Client.BLL.Services.Department
@@ -16,10 +18,10 @@ namespace Company.Client.BLL.Services.Department
 
         public IEnumerable<DepartmentDto> GetAllDepartments()
         {
-            var departments = _unitOfWork.DepartmentRepository.GetAll();
+            var departments = _unitOfWork.DepartmentRepository.GetAll(includes: d => d.Include(d=>d.Manager));
 
             foreach (var department in departments)
-                yield return new DepartmentDto(department.Id, department.Name, department.Code, department.CreationDate);
+                yield return new DepartmentDto(department.Id, department.Name, department.Code, department.CreationDate, $"{department.Manager.FirstName} {department.Manager.LastName}" , department.Description??"NA");
         }
 
         public DepartmentDetailsDto? GetDepartmentById(int id)
@@ -43,7 +45,29 @@ namespace Company.Client.BLL.Services.Department
                 department.CreationDate
             );
         }
+        public DepartmentDetailsDto? GetDepartmentDetails(int id)
+        {
+            var department = _unitOfWork.DepartmentRepository.Get(
+                filter: D => D.Id == id,
+                includes: D => D.Include(D => D.Manager)
+            );
+            if (department == null)
+                return null;
 
+            var departmentDto = new DepartmentDetailsDto
+                (
+                    id,
+                    department.CreatedBy,
+                    department.CreatedOn,
+                    department.LastModifiedBy,
+                    department.LastModifiedOn,
+                    department.Name,
+                    department.Code,
+                    department.Description,
+                    department.CreationDate
+                );
+            return departmentDto;
+        }
         public int CreateDepartment(CreateDepartmentDto department)
         {
             var departmentToCreate = new DAL.Entities.Department()

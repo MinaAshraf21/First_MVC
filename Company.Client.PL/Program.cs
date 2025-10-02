@@ -1,10 +1,6 @@
-using Company.Client.DAL.Persistence.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Company.Client.BLL;
 using Company.Client.DAL;
 using Company.Client.PL.Extensions;
-using Company.Client.BLL.Services.Department;
-using Company.Client.BLL;
 
 namespace Company.Client.PL
 {
@@ -44,6 +40,22 @@ namespace Company.Client.PL
             var app = builder.Build();
 
             app.InitializeDatabase();
+
+            #region Use , Map , Run
+            //app.Use(async (httpContext, next) =>
+            //{
+            //    await httpContext.Response.WriteAsync("hello");
+            //    await next(httpContext);
+            //});
+            //app.Map("/home", appBuilder =>
+            //{
+            //    appBuilder.Run(async httpContext =>
+            //    {
+            //        await httpContext.Response.WriteAsync("hello");
+            //    })
+            //});
+
+            #endregion
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

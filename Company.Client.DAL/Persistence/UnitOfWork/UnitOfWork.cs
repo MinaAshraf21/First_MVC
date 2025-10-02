@@ -14,14 +14,27 @@ namespace Company.Client.DAL.Persistence.UnitOfWork
     {
         private readonly AppDbContext _context;
 
-        public IDepartmentRepository? DepartmentRepository { get; set; }
+        //public IDepartmentRepository? DepartmentRepository { get; set; }
+        //public IEmployeeRepository? EmployeeRepository { get; set; }
+
+        private readonly Lazy<DepartmentRepository> _departmentRepository;
+        private readonly Lazy<EmployeeRepository> _employeeRepository;
 
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
-            DepartmentRepository = new DepartmentRepository(_context);
+
+            //DepartmentRepository = new DepartmentRepository(_context);
             //EmployeeRepository = new EmployeeRepository(context);
+
+            //using Lazy is better because the initialization will not be done until we use them
+            //Factory Design Pattern [constructor value]
+            _departmentRepository = new Lazy<DepartmentRepository>(() => new DepartmentRepository(_context));
+            _employeeRepository = new Lazy<EmployeeRepository>(() => new EmployeeRepository(_context));
         }
+
+        public IDepartmentRepository DepartmentRepository => _departmentRepository.Value;
+        public IEmployeeRepository EmployeeRepository => _employeeRepository.Value;
 
         public int Complete()
         {

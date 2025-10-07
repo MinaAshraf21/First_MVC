@@ -69,6 +69,7 @@
                             </a>
                     </th>
                     <th>Status</th>
+                        <th class="text-center">(De)Activate</th>
                     <th class="text-center">Details</th>
                     <th class="text-center">Edit</th>
                     <th class="text-center">Delete</th>
@@ -90,6 +91,13 @@
                             {
                                 <span class="badge bg-secondary text-center">Inactive</span>
                             }
+                        </td>
+                        <td class="text-center">
+                                <form asp-action="ToggleStatus" asp-controller="Employee" asp-route-id="@item.Id">
+                                <button type="submit" class="btn btn-sm @(item.IsActive ? "btn-outline-secondary" : "btn-outline-success")">
+                                     @(item.IsActive ? "DeActivate" : "Activate")
+                                </button>
+                            </form>
                         </td>
                         <td class="text-center">
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-2">
@@ -149,23 +157,23 @@
         <nav aria-label="Page navigation">
             <ul class="pagination">
                 <li class="page-item @prevDisabled">
-                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-pageSize="@Model.PageSize">
+                        <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-pageNum="@(Model.PageIndex - 1)" asp-route-pageSize="@Model.PageSize" asp-route-sortBy="@Model.SortBy" asp-route-isAscending="@(Model.IsAscending)">
                         Previous
                     </a>
                 </li>
 
-                @for (int i = Math.Max(1, Model.PageIndex - 2); i
-                                <= Math.Min(Model.TotalPages, Model.PageIndex + 2); i++)
+                @for (int i = Math.Max(1, Model.PageIndex - 2);
+                               i <= Math.Min(Model.TotalPages, Model.PageIndex + 2); i++)
                 {
                     <li class="page-item @(i == Model.PageIndex ? " active " : " ")">
-                        <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-pageSize="@Model.PageSize">
+                            <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-pageNum="@i" asp-route-pageSize="@Model.PageSize" asp-route-sortBy="@Model.SortBy" asp-route-isAscending="@(Model.IsAscending)">
                             @i
                         </a>
                     </li>
                 }
 
                 <li class="page-item @nextDisabled">
-                    <a class="page-link" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-pageSize="@Model.PageSize">
+                        <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-pageNum="@(Model.PageIndex + 1)" asp-route-pageSize="@Model.PageSize" asp-route-sortBy="@Model.SortBy" asp-route-isAscending="@(Model.IsAscending)">
                         Next
                     </a>
                 </li>

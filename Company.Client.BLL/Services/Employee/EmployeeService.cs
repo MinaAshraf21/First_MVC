@@ -1,4 +1,5 @@
-﻿using Company.Client.BLL.Models.Departments;
+﻿using AutoMapper;
+using Company.Client.BLL.Models.Departments;
 using Company.Client.BLL.Models.Employee;
 using Company.Client.DAL.Contracts;
 using Company.Client.DAL.Entities;
@@ -11,10 +12,12 @@ namespace Company.Client.BLL.Services.Employee
     public class EmployeeService : IEmployeeService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public EmployeeService(IUnitOfWork unitOfWork)
+        public EmployeeService(IUnitOfWork unitOfWork , IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public PaginatedResult<EmployeeDto> GetPaginatedEmployees(PaginationParameters parameters)
@@ -26,31 +29,33 @@ namespace Company.Client.BLL.Services.Employee
                 //orderBy: E => E.OrderBy(E => E.Id)
                 );
 
+            var employeesDto = _mapper.Map<IEnumerable<EmployeeDto>>(employees.Data);
+
             PaginatedResult<EmployeeDto> result = new PaginatedResult<EmployeeDto>()
             {
-                Data = employees.Data.Select(employee => new EmployeeDto
-                        (
-                        employee.Id,
-                        employee.Age,
-                        employee.FirstName,
-                        employee.LastName,
-                        employee.Salary,
-                        employee.Address,
-                        employee.Email,
-                        employee.PhoneNumber,
-                        employee.IsActive,
-                        employee.HiringDate,
-                        employee.Gender,
-                        employee.EmployeeType,
-                        employee.DepartmentId,
-                        employee.Department.Name,
-                        employee.CreatedBy,
-                        employee.CreatedOn,
-                        employee.LastModifiedBy,
-                        employee.LastModifiedOn
+                Data = employeesDto
 
-                        )
-                ),
+                    ///new EmployeeDto(
+                    ///        employee.Id,
+                    ///        employee.Age,
+                    ///        employee.FirstName,
+                    ///        employee.LastName,
+                    ///        employee.Salary,
+                    ///        employee.Address,
+                    ///        employee.Email,
+                    ///        employee.PhoneNumber,
+                    ///        employee.IsActive,
+                    ///        employee.HiringDate,
+                    ///        employee.Gender,
+                    ///        employee.EmployeeType,
+                    ///        employee.DepartmentId,
+                    ///        employee.Department.Name,
+                    ///        employee.CreatedBy,
+                    ///        employee.CreatedOn,
+                    ///        employee.LastModifiedBy,
+                    ///        employee.LastModifiedOn
+                    ///)
+                ,
                 PageIndex = parameters.PageIndex,
                 PageSize = parameters.PageSize,
                 TotalCount = employees.TotalCount
@@ -68,28 +73,28 @@ namespace Company.Client.BLL.Services.Employee
                 return null;
 
             //manual mapping , we should use AutoMapper or Mapster(better performance)
-            var employeeDto =  new EmployeeDto
-            (
-                employee.Id,
-                employee.Age,
-                employee.FirstName,
-                employee.LastName,
-                employee.Salary,
-                employee.Address,
-                employee.Email,
-                employee.PhoneNumber,
-                employee.IsActive,
-                employee.HiringDate,
-                employee.Gender,
-                employee.EmployeeType,
-                employee.DepartmentId,
-                employee.Department.Name,
-                employee.CreatedBy,
-                employee.CreatedOn,
-                employee.LastModifiedBy,
-                employee.LastModifiedOn
-                
-            );
+            var employeeDto = _mapper.Map<EmployeeDto>(employee);
+            ///new EmployeeDto
+            ///(
+            ///    employee.Id,
+            ///    employee.Age,
+            ///    employee.FirstName,
+            ///    employee.LastName,
+            ///    employee.Salary,
+            ///    employee.Address,
+            ///    employee.Email,
+            ///    employee.PhoneNumber,
+            ///    employee.IsActive,
+            ///    employee.HiringDate,
+            ///    employee.Gender,
+            ///    employee.EmployeeType,
+            ///    employee.DepartmentId,
+            ///    employee.Department.Name,
+            ///    employee.CreatedBy,
+            ///    employee.CreatedOn,
+            ///    employee.LastModifiedBy,
+            ///    employee.LastModifiedOn
+            ///);
 
             return employeeDto;
         }
@@ -104,29 +109,30 @@ namespace Company.Client.BLL.Services.Employee
             if (employee == null)
                 return null;
 
+            var employeeDto = _mapper.Map<EmployeeDto>(employee);
+            
             //manual mapping , we should use AutoMapper or Mapster(better performance)
-            var employeeDto =  new EmployeeDto
-            (
-                employee.Id,
-                employee.Age,
-                employee.FirstName,
-                employee.LastName,
-                employee.Salary,
-                employee.Address,
-                employee.Email,
-                employee.PhoneNumber,
-                employee.IsActive,
-                employee.HiringDate,
-                employee.Gender,
-                employee.EmployeeType,
-                employee.DepartmentId,
-                employee.Department.Name,
-                employee.CreatedBy,
-                employee.CreatedOn,
-                employee.LastModifiedBy,
-                employee.LastModifiedOn
-                
-            );
+            ///new EmployeeDto
+            ///(
+            ///    employee.Id,
+            ///    employee.Age,
+            ///    employee.FirstName,
+            ///    employee.LastName,
+            ///    employee.Salary,
+            ///    employee.Address,
+            ///    employee.Email,
+            ///    employee.PhoneNumber,
+            ///    employee.IsActive,
+            ///    employee.HiringDate,
+            ///    employee.Gender,
+            ///    employee.EmployeeType,
+            ///    employee.DepartmentId,
+            ///    employee.Department.Name,
+            ///    employee.CreatedBy,
+            ///    employee.CreatedOn,
+            ///    employee.LastModifiedBy,
+            ///    employee.LastModifiedOn
+            ///);
 
             var departmentDto = new DepartmentDto
             (
@@ -149,25 +155,29 @@ namespace Company.Client.BLL.Services.Employee
         {
             ValidateCreateEmployeeBusinessLogic(employee);
 
-            var employeeToCreate = new DAL.Entities.Employee()
-            {
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Age = employee.Age,
-                Address = employee.Address,
-                Email = employee.Email,
-                HiringDate = employee.HiringDate,
-                EmployeeType = employee.EmployeeType,
-                DepartmentId = employee.DepartmentId,
-                Gender = employee.Gender,
-                IsActive = true,
-                Salary = employee.Salary,
-                PhoneNumber = employee.PhoneNumber,
-                //will be set by interceptors
-                CreatedBy = "",
-                LastModifiedBy = ""
-            };
+            var employeeToCreate = _mapper.Map<DAL.Entities.Employee>(employee);
+            ///new DAL.Entities.Employee()
+            ///{
+            ///    FirstName = employee.FirstName,
+            ///    LastName = employee.LastName,
+            ///    Age = employee.Age,
+            ///    Address = employee.Address,
+            ///    Email = employee.Email,
+            ///    HiringDate = employee.HiringDate,
+            ///    EmployeeType = employee.EmployeeType,
+            ///    DepartmentId = employee.DepartmentId,
+            ///    Gender = employee.Gender,
+            ///    IsActive = true,
+            ///    Salary = employee.Salary,
+            ///    PhoneNumber = employee.PhoneNumber,
+            ///    //will be set by interceptors
+            ///    CreatedBy = "",
+            ///    LastModifiedBy = ""
+            ///};
 
+            employeeToCreate.IsActive = true;
+            employeeToCreate.CreatedBy = "";
+            employeeToCreate.LastModifiedBy = "";
             _unitOfWork.EmployeeRepository.Add(employeeToCreate);
 
             return _unitOfWork.Complete();
@@ -181,6 +191,8 @@ namespace Company.Client.BLL.Services.Employee
 
             ValidateUpdateEmployeeBusinessLogic(employeeDto, empToUpdate);
 
+            //empToUpdate = _mapper.Map<DAL.Entities.Employee>(employeeDto);
+
             empToUpdate.FirstName = employeeDto.FirstName;
             empToUpdate.LastName = employeeDto.LastName;
             empToUpdate.Address = employeeDto.Address;
@@ -190,7 +202,7 @@ namespace Company.Client.BLL.Services.Employee
             empToUpdate.Gender = employeeDto.Gender;
             empToUpdate.Salary = employeeDto.Salary;
             empToUpdate.PhoneNumber = employeeDto.PhoneNumber;
-            empToUpdate.IsActive = empToUpdate.IsActive;
+            empToUpdate.IsActive = employeeDto.IsActive;
 
             _unitOfWork.EmployeeRepository.Update(empToUpdate);
 
@@ -240,10 +252,10 @@ namespace Company.Client.BLL.Services.Employee
             if (dept == null)
                 throw new ArgumentNullException($"Department with ID: {employee.DepartmentId} doesn't exist");
 
-            var expectedSalary = emp.Salary*1.1m;
+            //var expectedSalary = emp.Salary*1.1m;
 
-            if (employee.Salary < expectedSalary)
-                throw new ArgumentOutOfRangeException($"EmpSalary must be greater than the Expected Salary: {expectedSalary}");
+            //if (employee.Salary < expectedSalary)
+            //    throw new ArgumentOutOfRangeException($"EmpSalary must be greater than the Expected Salary: {expectedSalary}");
 
         }
 

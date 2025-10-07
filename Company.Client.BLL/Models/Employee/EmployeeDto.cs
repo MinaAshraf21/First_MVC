@@ -9,7 +9,7 @@ namespace Company.Client.BLL.Models.Employee
 {
     public record EmployeeDto
     (
-        int id,
+        int Id,
         int Age,
         string FirstName,
         string LastName,

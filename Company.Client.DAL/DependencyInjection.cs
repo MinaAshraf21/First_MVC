@@ -15,7 +15,8 @@ namespace Company.Client.DAL
 
         public static IServiceCollection AddPersistenceServices(this IServiceCollection Services , IConfiguration Configuration)
         {
-             Services.AddDbContext<AppDbContext>(
+            //the defualt service lifetime her is scoped
+            Services.AddDbContext<AppDbContext>(
 
                 optionsAction: optionsBuilder =>
                     optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")),

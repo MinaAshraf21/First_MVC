@@ -15,6 +15,7 @@ namespace Company.Client.PL
 
             builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.AddApplicationServices();
+            builder.Services.AddPresentationServices();
 
             #region Inject DbContext & its Options
             //builder.Services.AddDbContext<AppDbContext>(

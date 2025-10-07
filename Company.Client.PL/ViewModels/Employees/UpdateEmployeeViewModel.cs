@@ -7,6 +7,7 @@ namespace Company.Client.PL.ViewModels.Employees
 {
     public class UpdateEmployeeViewModel
     {
+        public int Id { get; set; }
         [Required]
         [DisplayName("First Name")]
         [MinLength(3,ErrorMessage = "Minumim Length of First Name is 5 Charachters")]

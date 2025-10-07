@@ -16,7 +16,7 @@ namespace Company.Client.BLL.Models.Employee
         string? Address,
         string? Email,
         string? PhoneNumber,
-        bool isActive,
+        bool IsActive,
         Gender Gender,
         EmployeeType EmployeeType,
         int DepartmentId

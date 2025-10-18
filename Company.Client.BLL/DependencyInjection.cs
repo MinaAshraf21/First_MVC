@@ -1,5 +1,6 @@
 ﻿using Company.Client.BLL.Profiles.Employee;
 using Company.Client.BLL.Services.Department;
+using Company.Client.BLL.Services.EmailSender;
 using Company.Client.BLL.Services.Employee;
 using Company.Client.DAL.Contracts;
 using Company.Client.DAL.Contracts.Repositories;
@@ -32,6 +33,8 @@ namespace Company.Client.BLL
             {
                 cfg.AddMaps(Assembly.GetExecutingAssembly());
             });
+
+            Services.AddScoped<IEmailSender, EmailSender>();
 
             return Services;
         }

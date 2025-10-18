@@ -2,6 +2,7 @@
 using Company.Client.BLL.Services.Employee;
 using Company.Client.DAL.Entities.Identity;
 using Company.Client.DAL.Persistence.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 
@@ -36,13 +37,26 @@ namespace Company.Client.PL
                 options.Lockout.MaxFailedAccessAttempts = 5; // means after 5 failed attempts to login -> user account will be locked , default is 5
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(2); // if user account is locked , it will be locked for 2 hours
 
-                options.SignIn.RequireConfirmedEmail = true; // if true -> user must confirm his email before login
-                options.SignIn.RequireConfirmedPhoneNumber = false; // if true -> user must confirm his phone number before login
-                options.SignIn.RequireConfirmedAccount = true; // if true -> user must confirm his account (email or phone) before login
+                //options.SignIn.RequireConfirmedEmail = true; // if true -> user must confirm his email before login
+                //options.SignIn.RequireConfirmedPhoneNumber = false; // if true -> user must confirm his phone number before login
+                //options.SignIn.RequireConfirmedAccount = true; // if true -> user must confirm his account (email or phone) before login
             })
                 //Identity Store [Repository] needs a DbContext to be able to store and retrieve Identity data
                 // so we need to add an EFCore implementation of Identity information Store 
-                .AddEntityFrameworkStores<AppDbContext>();
+                .AddEntityFrameworkStores<AppDbContext>()
+
+                // we need to add the service that responsible for generating tokens in case of changing passwords or emails etc...
+                .AddDefaultTokenProviders();
+            //register required services by authentication services
+            Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.LogoutPath = "/Account/Logout";
+                    options.AccessDeniedPath = "/Account/AccessDenied";
+                });
+
+            //Services.AddAuthorization();
 
             return Services;
         }

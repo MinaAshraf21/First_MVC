@@ -73,8 +73,13 @@ namespace Company.Client.PL
             app.UseHttpsRedirection();
             app.UseRouting();
 
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            //checks for authentication cookie in the request or tokens
+            //assigns a user object to the HttpContext if the user is authenticated
+            //      we can use this user object in the controller or razor pages to check if the user is authenticated or not
+            app.UseAuthentication();
+            //checks if the user has the right to access the resource
+            app.UseAuthorization();
+
 
             app.MapStaticAssets();
             app.MapControllerRoute(

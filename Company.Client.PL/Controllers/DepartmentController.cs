@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Company.Client.BLL.Models.Departments;
 using Company.Client.BLL.Services.Department;
 using Company.Client.PL.ViewModels.Departments;
-using Company.Client.BLL.Models.Departments;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Company.Client.PL.Controllers
 {
 
     //DepartmentController is a Controller [Inheritance]
     //DepartmentController has an IDepartmentService [Composition]
+    [Authorize]
     public class DepartmentController : Controller
     {
 

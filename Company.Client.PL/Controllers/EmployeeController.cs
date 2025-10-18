@@ -6,12 +6,14 @@ using Company.Client.DAL.Contracts.Repositories;
 using Company.Client.DAL.Entities;
 using Company.Client.DAL.Persistence.Common;
 using Company.Client.PL.ViewModels.Employees;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Company.Client.PL.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
@@ -128,6 +130,7 @@ namespace Company.Client.PL.Controllers
             return View(EmpDetailsVM);
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Create()
         {
@@ -145,8 +148,10 @@ namespace Company.Client.PL.Controllers
 
             return View(empVM);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Create(CreateEmployeeViewModel createEmployeeVM)
         {
             string message = "Employee Created Successfuly!";

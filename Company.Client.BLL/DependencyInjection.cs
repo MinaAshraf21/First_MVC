@@ -3,6 +3,7 @@ using Company.Client.BLL.Services.Department;
 using Company.Client.BLL.Services.Employee;
 using Company.Client.BLL.Services.Shared.EmailSender;
 using Company.Client.BLL.Services.Shared.MailService;
+using Company.Client.BLL.Services.Shared.TwilioService;
 using Company.Client.DAL.Contracts;
 using Company.Client.DAL.Contracts.Repositories;
 using Company.Client.DAL.Persistence.Data;
@@ -37,6 +38,7 @@ namespace Company.Client.BLL
 
             Services.AddScoped<IEmailSender, EmailSender>();
             Services.AddScoped<IMailService, MailService>();
+            Services.AddScoped<ITwilioService, TwilioService>();
 
             return Services;
         }

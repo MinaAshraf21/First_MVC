@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Company.Client.BLL.Services.Shared.EmailSender;
 using Company.Client.DAL.Common.Entities;
 using Company.Client.BLL.Services.Shared.MailService;
+using Company.Client.BLL.Services.Shared.TwilioService;
 
 namespace Company.Client.PL.Controllers
 {
@@ -14,16 +15,19 @@ namespace Company.Client.PL.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly IMailService _mailService;
+        private readonly ITwilioService _twilioService;
 
         public AccountController(UserManager<ApplicationUser> userManager ,
                                 SignInManager<ApplicationUser> signInManager ,
                                 IEmailSender emailSender , 
-                                IMailService mailService)
+                                IMailService mailService , 
+                                ITwilioService twilioService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _mailService = mailService;
+            _twilioService = twilioService;
         }
 
         [HttpGet]
@@ -135,7 +139,7 @@ namespace Company.Client.PL.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult SendResetPasswordUrl(ForgetPasswordViewModel forgetPasswordVM)
+        public IActionResult SendResetPasswordEmail(ForgetPasswordViewModel forgetPasswordVM)
         {
             if (!ModelState.IsValid)
                 return View("ForgetPassword", forgetPasswordVM);
@@ -158,7 +162,7 @@ namespace Company.Client.PL.Controllers
                     Body = url
                 };
                 _mailService.SendEmail(email);
-                return RedirectToAction("CheckYourInbox");
+                return RedirectToAction("CheckYourEmail");
             }
             else
             {
@@ -166,9 +170,37 @@ namespace Company.Client.PL.Controllers
                 return View("ForgetPassword", forgetPasswordVM);
             }
         }
+        public IActionResult SendResetPasswordSms(ForgetPasswordViewModel forgetPasswordVM)
+        {
+            if (!ModelState.IsValid)
+                return View("ForgetPassword", forgetPasswordVM);
+
+            var user = _userManager.FindByEmailAsync(forgetPasswordVM.Email).Result;
+
+            if (user is not null)
+            {
+                var _token = _userManager.GeneratePasswordResetTokenAsync(user).Result;
+                //Request.Scheme => gets the scheme of the current request (HTTP or HTTPS) OR BaseURL
+                var url = Url.Action("ResetPassword", "Account", new { email = forgetPasswordVM.Email, token = _token } , Request.Scheme);
+                //Send Email with Reset Password Url
+                var sms = new Sms()
+                {
+                    To = forgetPasswordVM.Email,
+                    Body = url
+                };
+                _twilioService.SendSms(sms);
+                return RedirectToAction("CheckYourPhone");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Invalid Phone Number");
+                return View("ForgetPassword", forgetPasswordVM);
+            }
+        }
 
         [HttpGet]
-        public IActionResult CheckYourInbox() { return View(); }
+        public IActionResult CheckYourEmail() { return View(); }
+        public IActionResult CheckYourPhone() { return View(); }
 
         [HttpGet]
         public IActionResult ResetPassword(string email , string token)

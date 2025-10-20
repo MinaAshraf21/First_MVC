@@ -58,6 +58,8 @@ namespace Company.Client.PL.Controllers
                 }
                 return View(signUpVM);
             }
+            var roleResult = await _userManager.AddToRoleAsync(user, "Admin");
+
             return RedirectToAction(nameof(Login));
         }
 

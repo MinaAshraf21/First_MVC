@@ -2,7 +2,9 @@
 using Company.Client.PL.ViewModels.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Company.Client.BLL.Services.EmailSender;
+using Company.Client.BLL.Services.Shared.EmailSender;
+using Company.Client.DAL.Common.Entities;
+using Company.Client.BLL.Services.Shared.MailService;
 
 namespace Company.Client.PL.Controllers
 {
@@ -11,14 +13,17 @@ namespace Company.Client.PL.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IMailService _mailService;
 
         public AccountController(UserManager<ApplicationUser> userManager ,
                                 SignInManager<ApplicationUser> signInManager ,
-                                IEmailSender emailSender)
+                                IEmailSender emailSender , 
+                                IMailService mailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _mailService = mailService;
         }
 
         [HttpGet]
@@ -152,7 +157,7 @@ namespace Company.Client.PL.Controllers
                     //Body = "Click on this link to reset your password <a href='#'>Reset Password</a>"
                     Body = url
                 };
-                _emailSender.SendEmail(email);
+                _mailService.SendEmail(email);
                 return RedirectToAction("CheckYourInbox");
             }
             else

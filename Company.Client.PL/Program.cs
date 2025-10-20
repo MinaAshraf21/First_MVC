@@ -1,6 +1,7 @@
 using Company.Client.BLL;
 using Company.Client.DAL;
 using Company.Client.PL.Extensions;
+using Company.Client.PL.Settings;
 
 namespace Company.Client.PL
 {
@@ -16,6 +17,8 @@ namespace Company.Client.PL
             builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.AddApplicationServices();
             builder.Services.AddPresentationServices();
+
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 
             #region Inject DbContext & its Options
             //builder.Services.AddDbContext<AppDbContext>(

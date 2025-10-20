@@ -1,7 +1,8 @@
 ﻿using Company.Client.BLL.Profiles.Employee;
 using Company.Client.BLL.Services.Department;
-using Company.Client.BLL.Services.EmailSender;
 using Company.Client.BLL.Services.Employee;
+using Company.Client.BLL.Services.Shared.EmailSender;
+using Company.Client.BLL.Services.Shared.MailService;
 using Company.Client.DAL.Contracts;
 using Company.Client.DAL.Contracts.Repositories;
 using Company.Client.DAL.Persistence.Data;
@@ -35,6 +36,7 @@ namespace Company.Client.BLL
             });
 
             Services.AddScoped<IEmailSender, EmailSender>();
+            Services.AddScoped<IMailService, MailService>();
 
             return Services;
         }

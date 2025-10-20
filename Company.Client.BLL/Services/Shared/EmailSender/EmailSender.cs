@@ -1,13 +1,8 @@
-﻿using Company.Client.DAL.Entities.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Company.Client.DAL.Common.Entities;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Company.Client.BLL.Services.EmailSender
+namespace Company.Client.BLL.Services.Shared.EmailSender
 {
     public class EmailSender : IEmailSender
     {

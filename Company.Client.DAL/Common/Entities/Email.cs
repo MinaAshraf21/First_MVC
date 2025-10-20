@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Company.Client.DAL.Entities.Identity
+namespace Company.Client.DAL.Common.Entities
 {
     public class Email
     {

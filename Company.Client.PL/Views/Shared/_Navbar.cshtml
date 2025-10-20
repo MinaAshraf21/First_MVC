@@ -32,10 +32,6 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="Index">Roles</a>
                             </li>
                         }
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Signout">SignOut</a>
-                        </li>
                     }
                     else
                     {
@@ -48,6 +44,15 @@
 
                     }
                 </ul>
+                <ul class="navbar-nav">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Signout">SignOut</a>
+                        </li>
+                    }
+                </ul>
+
             </div>
         </div>
     </nav>

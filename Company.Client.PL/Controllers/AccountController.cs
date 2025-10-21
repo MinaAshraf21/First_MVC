@@ -1,11 +1,15 @@
-﻿using Company.Client.DAL.Entities.Identity;
-using Company.Client.PL.ViewModels.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Company.Client.BLL.Services.Shared.EmailSender;
-using Company.Client.DAL.Common.Entities;
+﻿using Company.Client.BLL.Services.Shared.EmailSender;
 using Company.Client.BLL.Services.Shared.MailService;
 using Company.Client.BLL.Services.Shared.TwilioService;
+using Company.Client.DAL.Common.Entities;
+using Company.Client.DAL.Entities.Identity;
+using Company.Client.PL.ViewModels.Identity;
+using Humanizer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Company.Client.PL.Controllers
 {
@@ -127,6 +131,62 @@ namespace Company.Client.PL.Controllers
 
         }
 
+        public IActionResult GoogleLogin()
+        {
+            var prop = new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("GoogleResponse")
+            };
+            return Challenge(prop , GoogleDefaults.AuthenticationScheme);
+        }
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            if (!result.Succeeded)
+            {
+                TempData["Error"] = "Google authentication failed";
+                return RedirectToAction("Login");
+            }
+                var claims = result.Principal.Identities.FirstOrDefault()?.Claims;
+                var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var firstName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+                var lastName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+
+                if (string.IsNullOrEmpty(email))
+                {
+                    TempData["Error"] = "Could not retrieve email from Google";
+                    return RedirectToAction("Login");
+                }
+
+                var user = await _userManager.FindByEmailAsync(email);
+
+                if (user == null)
+                {
+                    user = new ApplicationUser
+                    {
+                        UserName = email,
+                        Email = email,
+                        FirstName = firstName,
+                        LastName = lastName,
+                        EmailConfirmed = true // Google emails are already verified
+                    };
+
+                    var createResult = await _userManager.CreateAsync(user);
+                    if (!createResult.Succeeded)
+                    {
+                        TempData["Error"] = "Failed to create user account";
+                        return RedirectToAction("Login");
+                    }
+
+                    await _userManager.AddToRoleAsync(user, "User");
+                }
+
+                //generate cookie
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                return RedirectToAction("Index", "Home");
+            }
+
         public async Task<IActionResult> Signout()
         {
             await _signInManager.SignOutAsync();
@@ -170,6 +230,8 @@ namespace Company.Client.PL.Controllers
                 return View("ForgetPassword", forgetPasswordVM);
             }
         }
+        
+        [HttpPost]
         public IActionResult SendResetPasswordSms(ForgetPasswordViewModel forgetPasswordVM)
         {
             if (!ModelState.IsValid)
@@ -200,6 +262,8 @@ namespace Company.Client.PL.Controllers
 
         [HttpGet]
         public IActionResult CheckYourEmail() { return View(); }
+        
+        [HttpGet]
         public IActionResult CheckYourPhone() { return View(); }
 
         [HttpGet]

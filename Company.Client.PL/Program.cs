@@ -17,7 +17,7 @@ namespace Company.Client.PL
 
             builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.AddApplicationServices();
-            builder.Services.AddPresentationServices();
+            builder.Services.AddPresentationServices(builder.Configuration);
 
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
             builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection(nameof(TwilioSettings)));

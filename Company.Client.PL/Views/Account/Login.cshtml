@@ -20,7 +20,10 @@
 			</div>
 			<input type="submit" value="Login">
 		</form>
-		<p>Don't have an Account? <a asp-action="SignUp">SignUp.</a></p>
+		<a asp-action="GoogleLogin" style="display: block; color: white; background-color:#DD5447; width: 50%;" class="btn mx-auto mb-3">
+			<i class="fa-brands fa-google"></i> Login with Google
+		</a>
+		<p class="mb-2">Don't have an Account? <a asp-action="SignUp">SignUp.</a></p>
 		<p>Forgotten Password? <a asp-action="ForgetPassword">Reset your Password Now!</a></p>
 	</div>
 </div>

@@ -3,6 +3,7 @@ using Company.Client.BLL.Services.Employee;
 using Company.Client.DAL.Entities.Identity;
 using Company.Client.DAL.Persistence.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 
@@ -10,7 +11,7 @@ namespace Company.Client.PL
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddPresentationServices(this IServiceCollection Services)
+        public static IServiceCollection AddPresentationServices(this IServiceCollection Services , IConfiguration Configuration)
         {
             Services.AddAutoMapper(cfg =>
             {
@@ -54,7 +55,26 @@ namespace Company.Client.PL
                     options.LoginPath = "/Account/Login";
                     options.LogoutPath = "/Account/Logout";
                     options.AccessDeniedPath = "/Account/AccessDenied";
+                }).AddGoogle(options =>
+                {
+                    options.ClientId = Configuration["Authentication:Google:ClientId"];
+                    options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
                 });
+
+
+            /*
+             .AddGoogle(options =>
+                {
+                    options.ClientId = Configuration["Authentication:Google:ClientId"];
+                    options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                });*/
+
+            //Services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            //})
+
 
             //Services.AddAuthorization();
 
